@@ -61,7 +61,7 @@ const noughtsAndCrosses = (function () {
 
 			const addMark = function () {
 				if (gameBoard.index[this.id] != "") {
-					alert(`that one's taken!`);
+					//make cell flash or something
 				} else {
 					this.setAttribute("class", "game-grid-cell populated");
 					_addMarkToArray(this);
@@ -69,14 +69,17 @@ const noughtsAndCrosses = (function () {
 					_actionsAfterTurn();
 				}
 			};
-			
+
 			const _actionsAfterTurn = function () {
 				game.turn++;
 				game.checkWinner();
-				console.log(game.win);
-				if (game.turn != 9) { 
-				players.changeCurrentPlayer();
-				players.addCurrentPlayerInfo(); //This is what's making the tie text not show up.
+				if (game.win == false) {
+					if (game.turn != 9) {
+						players.changeCurrentPlayer();
+						players.addCurrentPlayerInfo();
+					} else {
+						return;
+					}
 				} else {
 					return;
 				}
@@ -98,21 +101,21 @@ const noughtsAndCrosses = (function () {
 
 			const addWinnerText = function () {
 				gameBoard.htmlEditor.htmlInfo.innerHTML = `${players.currentPlayer.name} wins!`;
-			}
+			};
 
 			const addTieText = function () {
-				console.log('tie!');
 				gameBoard.htmlEditor.htmlInfo.innerHTML = `It's a tie!`;
-			}
+			};
 
-			const toggleButtonStyle = function () {
-				if (_resetButton.classList.contains('emboldened')) {
-				 _resetButton.classList.remove('emboldened');
-				 _resetButton.style.border = "";
-				} else {
-				_resetButton.classList.add('emboldened');
+			const _buttonStyleOn = function () {
+				_resetButton.classList.add("emboldened");
 				_resetButton.style.border = "3px solid white";
-			}};
+			};
+
+			const _buttonStyleOff = function () {
+				_resetButton.classList.remove("emboldened");
+				_resetButton.style.border = "";
+			};
 
 			const _addEventListenerToButtons = function () {
 				_resetButton.addEventListener("click", resetGrid, true);
@@ -125,12 +128,12 @@ const noughtsAndCrosses = (function () {
 				game.turn = 0;
 				game.win = false;
 				_generateGameBoard();
-				resetCellClasses();
+				_resetCellClasses();
 				initialiseDOM();
-				toggleButtonStyle();
+				_buttonStyleOff();
 			};
 
-			const resetCellClasses = function () {
+			const _resetCellClasses = function () {
 				for (let i = 0; i < _htmlBoard.length; i++) {
 					const gridCell = _htmlBoard[i];
 					gridCell.setAttribute("class", "game-grid-cell");
@@ -145,20 +148,20 @@ const noughtsAndCrosses = (function () {
 
 			const endGameActions = function () {
 				removeEventListenersFromCells();
-				toggleButtonStyle();
-				if (game.win == true ) {
+				_buttonStyleOn();
+				if (game.win == true) {
 					addWinnerText();
 				} else {
 					addTieText();
 				}
-			}
+			};
 
 			return {
 				resetGrid,
 				htmlInfo,
 				initialiseDOM,
 				removeEventListenersFromCells,
-				endGameActions
+				endGameActions,
 			};
 		})();
 
@@ -200,7 +203,7 @@ const noughtsAndCrosses = (function () {
 			win,
 			checkWinner,
 			turn,
-			winner
+			winner,
 		};
 	})();
 	gameBoard.htmlEditor.initialiseDOM();
