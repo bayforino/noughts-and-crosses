@@ -60,3 +60,8 @@ button:hover {
   height:30px;
   place-self:center;
 }
+
+.flashing {
+  background-color: rgb(226, 87, 87);
+  transition: 200ms ease-in-out;
+}

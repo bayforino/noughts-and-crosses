@@ -61,7 +61,8 @@ const noughtsAndCrosses = (function () {
 
 			const addMark = function () {
 				if (gameBoard.index[this.id] != "") {
-					//make cell flash or something
+					this.classList.add("flashing");
+					setTimeout(() => this.classList.remove("flashing"), 400);
 				} else {
 					this.setAttribute("class", "game-grid-cell populated");
 					_addMarkToArray(this);
