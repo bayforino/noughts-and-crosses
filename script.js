@@ -52,6 +52,7 @@ const noughtsAndCrosses = (function () {
 		const htmlEditor = (function () {
 			const _htmlBoard = document.getElementsByClassName("game-grid-cell");
 			const htmlInfo = document.getElementById("main-info");
+			const _resetButton = document.getElementById("reset-button");
 			const _generateGameBoard = function () {
 				for (let i = 0; i < _htmlBoard.length; i++) {
 					_htmlBoard[i].innerHTML = gameBoard.index[i];
@@ -68,13 +69,17 @@ const noughtsAndCrosses = (function () {
 					_actionsAfterTurn();
 				}
 			};
-
+			
 			const _actionsAfterTurn = function () {
 				game.turn++;
 				game.checkWinner();
-				console.log(players.currentPlayer);
+				console.log(game.win);
+				if (game.win == false) { 
 				players.changeCurrentPlayer();
-				players.addCurrentPlayerInfo();
+				players.addCurrentPlayerInfo(); //This is what's making the tie text not show up.
+				} else {
+					return;
+				}
 			};
 
 			const _addEventListenersToCells = function () {
@@ -91,9 +96,26 @@ const noughtsAndCrosses = (function () {
 				}
 			};
 
+			const addWinnerText = function () {
+				gameBoard.htmlEditor.htmlInfo.innerHTML = `${players.currentPlayer.name} wins!`;
+			}
+
+			const addTieText = function () {
+				console.log('tie!');
+				gameBoard.htmlEditor.htmlInfo.innerHTML = `It's a tie!`;
+			}
+
+			const toggleButtonStyle = function () {
+				if (_resetButton.classList.contains('emboldened')) {
+				 _resetButton.classList.remove('emboldened');
+				 _resetButton.style.border = "";
+				} else {
+				_resetButton.classList.add('emboldened');
+				_resetButton.style.border = "3px solid white";
+			}};
+
 			const _addEventListenerToButtons = function () {
-				const resetButton = document.getElementById("reset-button");
-				resetButton.addEventListener("click", resetGrid, true);
+				_resetButton.addEventListener("click", resetGrid, true);
 			};
 
 			const resetGrid = function () {
@@ -101,9 +123,11 @@ const noughtsAndCrosses = (function () {
 				players.generatePlayers();
 				players.currentPlayer = player1;
 				game.turn = 0;
+				game.win = false;
 				_generateGameBoard();
 				resetCellClasses();
 				initialiseDOM();
+				toggleButtonStyle();
 			};
 
 			const resetCellClasses = function () {
@@ -119,11 +143,22 @@ const noughtsAndCrosses = (function () {
 				players.addCurrentPlayerInfo();
 			};
 
+			const endGameActions = function () {
+				removeEventListenersFromCells();
+				toggleButtonStyle();
+				if (game.win == true ) {
+					addWinnerText();
+				} else {
+					addTieText();
+				}
+			}
+
 			return {
 				resetGrid,
 				htmlInfo,
 				initialiseDOM,
 				removeEventListenersFromCells,
+				endGameActions
 			};
 		})();
 
@@ -135,7 +170,8 @@ const noughtsAndCrosses = (function () {
 
 	const game = (function () {
 		let turn = 0;
-
+		let win = false;
+		let winner = "";
 		// const winConditions = [
 		// 			[0, 1, 2],
 		// 			[3, 4, 5],
@@ -152,24 +188,20 @@ const noughtsAndCrosses = (function () {
 				gameBoard.index[1] == "x" &&
 				gameBoard.index[2] == "x"
 			) {
-				let winner = players.currentPlayer.name;
-				//setTimeouts are to stop alerts firing at the wrong time
-				setTimeout(function () {
-					alert(`${winner} wins!!!`);
-				}, 1);
-				gameBoard.htmlEditor.removeEventListenersFromCells();
+				game.win = true;
+				console.log(winner);
+				gameBoard.htmlEditor.endGameActions();
 			} else if (game.turn === 9) {
-				setTimeout(function () {
-					alert(`Unfortunately it's a draw. I'm so sorry.`);
-				}, 1);
-				gameBoard.htmlEditor.removeEventListenersFromCells();
+				gameBoard.htmlEditor.endGameActions();
 			} else {
 				return;
 			}
 		};
 		return {
+			win,
 			checkWinner,
 			turn,
+			winner
 		};
 	})();
 	gameBoard.htmlEditor.initialiseDOM();
