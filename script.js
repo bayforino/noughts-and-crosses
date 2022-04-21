@@ -1,24 +1,29 @@
-const game = (function () {
-
-
-
-
-//players module
+const noughtsAndCrosses = (function () {
+	//players module
 	const players = (function () {
 		const _playerFactory = (name, mark) => {
 			return { name, mark };
 		};
 
-		const _generatePlayers = function () {
+		const generatePlayers = function () {
 			// player1 = playerFactory(prompt('Player 1 name?'), 'x');
 			// player2 = playerFactory(prompt('player 2 name?'), 'o');
 			player1 = _playerFactory("Player X", "x");
 			player2 = _playerFactory("Player O", "o");
 		};
-		_generatePlayers();
+		generatePlayers();
 
 		let currentPlayer = player1;
-		const addInfo = function () {
+
+		const changeCurrentPlayer = function () {
+			if (players.currentPlayer == player1) {
+				players.currentPlayer = player2;
+			} else {
+				players.currentPlayer = player1;
+			}
+		};
+
+		const addCurrentPlayerInfo = function () {
 			gameBoard.htmlEditor.htmlInfo.innerHTML = `${players.currentPlayer.name}'s turn`;
 		};
 
@@ -27,92 +32,139 @@ const game = (function () {
 		};
 
 		return {
+			generatePlayers,
 			currentPlayer,
-			addInfo,
-			getCurrentPlayerSign
+			changeCurrentPlayer,
+			addCurrentPlayerInfo,
+			getCurrentPlayerSign,
 		};
 	})();
 
-
-
-
-
-//game board module
+	//game board module
 	const gameBoard = (function () {
 		let index = ["", "", "", "", "", "", "", "", ""];
-		const addMarkToArray = function (cell) {
+		const _addMarkToArray = function (cell) {
 			let cellNumber = cell.id;
-			index[cellNumber] = players.currentPlayer.mark;
+			gameBoard.index[cellNumber] = players.currentPlayer.mark;
 		};
 
-	//game board html editing module
+		//game board html editing module
 		const htmlEditor = (function () {
-			const htmlBoard = document.getElementsByClassName("game-grid-cell");
+			const _htmlBoard = document.getElementsByClassName("game-grid-cell");
 			const htmlInfo = document.getElementById("main-info");
-			const generateGameBoard = function () {
-				for (let i = 0; i < htmlBoard.length; i++) {
-					htmlBoard[i].innerHTML = index[i];
+			const _generateGameBoard = function () {
+				for (let i = 0; i < _htmlBoard.length; i++) {
+					_htmlBoard[i].innerHTML = gameBoard.index[i];
 				}
 			};
-			generateGameBoard();
 
 			const addMark = function () {
-				if (index[this.id] != "") {
+				if (gameBoard.index[this.id] != "") {
 					alert(`that one's taken!`);
 				} else {
-					addMarkToArray(this);
-					gameBoard.htmlEditor.generateGameBoard();
-					// checkWinner(gameBoard.index);
 					this.setAttribute("class", "game-grid-cell populated");
-					if (players.currentPlayer == player1) {
-						players.currentPlayer = player2;
-					} else {
-						players.currentPlayer = player1;
-					}
-					players.addInfo();
+					_addMarkToArray(this);
+					_generateGameBoard();
+					_actionsAfterTurn();
 				}
 			};
 
-			const addEventListenersToCells = function () {
-				for (let i = 0; i < htmlBoard.length; i++) {
-					const gridCell = htmlBoard[i];
+			const _actionsAfterTurn = function () {
+				game.turn++;
+				players.changeCurrentPlayer();
+				players.addCurrentPlayerInfo();
+				game.checkWinner();
+			};
+
+			const _addEventListenersToCells = function () {
+				for (let i = 0; i < _htmlBoard.length; i++) {
+					const gridCell = _htmlBoard[i];
 					gridCell.addEventListener("click", addMark, true);
 				}
 			};
-			
+
+			const _addEventListenerToButtons = function () {
+				const resetButton = document.getElementById("reset-button");
+				resetButton.addEventListener("click", resetGrid, true);
+			};
+
+			const resetGrid = function () {
+				gameBoard.index = ["", "", "", "", "", "", "", "", ""];
+				players.generatePlayers();
+				players.currentPlayer = player1;
+				game.turn = 0;
+				_generateGameBoard();
+				resetCellClasses();
+				initialiseDOM();
+			};
+
+			const resetCellClasses = function () {
+				for (let i = 0; i < _htmlBoard.length; i++) {
+					const gridCell = _htmlBoard[i];
+					gridCell.setAttribute("class", "game-grid-cell phlegm");
+				}
+			};
+
+			const initialiseDOM = function () {
+				_addEventListenersToCells();
+				_addEventListenerToButtons();
+				players.addCurrentPlayerInfo();
+			};
 
 			return {
-				generateGameBoard,
-				htmlBoard,
+				resetGrid,
 				htmlInfo,
-				addEventListenersToCells
-			}
+				initialiseDOM,
+			};
 		})();
 
 		return {
-			htmlEditor
+			index,
+			htmlEditor,
 		};
 	})();
 
-	// const declareWin = function () {
-	// 	alert(`${players.currentPlayer.name} wins!`);
-	// };
+	const game = (function () {
+		let turn = 0;
 
-	// const checkWinner = (fieldIndex) => {
-	// 	const winConditions = [
-	// 		[0, 1, 2],
-	// 		[3, 4, 5],
-	// 		[6, 7, 8],
-	// 		[0, 3, 6],
-	// 		[1, 4, 7],
-	// 		[2, 5, 8],
-	// 		[0, 4, 8],
-	// 		[2, 4, 6],
-	// 	];
-	// };
-
-
-
-	gameBoard.htmlEditor.addEventListenersToCells()
-	players.addInfo();
+		// const winConditions = [
+		// 			[0, 1, 2],
+		// 			[3, 4, 5],
+		// 			[6, 7, 8],
+		// 			[0, 3, 6],
+		// 			[1, 4, 7],
+		// 			[2, 5, 8],
+		// 			[0, 4, 8],
+		// 			[2, 4, 6],
+		// 		];
+		const checkWinner = function () {
+			if (
+				gameBoard.index[0] == "x" &&
+				gameBoard.index[1] == "x" &&
+				gameBoard.index[2] == "x"
+			) {
+				//setTimeouts are to stop alerts firing at the wrong time
+				setTimeout(function () {
+					alert(`${players.currentPlayer.name} wins!!!`);
+				}, 1);
+				setTimeout(function () {
+					gameBoard.htmlEditor.resetGrid();
+				}, 1);
+			} else if (game.turn === 9) {
+				setTimeout(function () {
+					alert(`Unfortunately it's a draw. I'm so sorry.`);
+				}, 1);
+				setTimeout(function () {
+					gameBoard.htmlEditor.resetGrid();
+				}, 1);
+			} else {
+				return;
+			}
+		};
+		return {
+			checkWinner,
+			turn,
+		};
+	})();
+	gameBoard.htmlEditor.initialiseDOM();
 })();
