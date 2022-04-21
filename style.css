@@ -1,6 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;900&display=swap');
+
 :root {
   overflow: hidden;
-  font-family: sans-serif;
+  font-family: 'Lato', sans-serif;
+  background-color: lightcoral;
+  color:white;
 }
 
 body {
@@ -20,19 +24,37 @@ body {
 }
 
 .game-grid {
-  border: 1px solid black;
   width: fit-content;
   display: grid;
   grid-template: repeat(3, 100px) / repeat(3, 100px);
+  gap: 3px;
+  background-color: white;
 }
 
 .game-grid-cell {
-  border: 1px solid black;
   display: grid;
   place-content: center;
+  font-size: 3rem;
+  background-color: lightcoral;
+}
+
+button {
+  border: 3px solid rgb(219, 79, 79);
+  border-radius: 5px;
+  background-color: lightcoral;
+  color: white;
+  font-family: 'lato', sans-serif;
+  transition: 100ms ease-in-out;
+}
+
+button:hover {
+  background-color: rgb(247, 166, 166);
+  cursor: pointer;
+  transition: 100ms ease-in-out;
 }
 
 #reset-button {
   width:100px;
+  height:30px;
   place-self:center;
 }
