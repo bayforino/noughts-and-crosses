@@ -74,7 +74,7 @@ const noughtsAndCrosses = (function () {
 				game.turn++;
 				game.checkWinner();
 				console.log(game.win);
-				if (game.win == false) { 
+				if (game.turn != 9) { 
 				players.changeCurrentPlayer();
 				players.addCurrentPlayerInfo(); //This is what's making the tie text not show up.
 				} else {
@@ -189,7 +189,6 @@ const noughtsAndCrosses = (function () {
 				gameBoard.index[2] == "x"
 			) {
 				game.win = true;
-				console.log(winner);
 				gameBoard.htmlEditor.endGameActions();
 			} else if (game.turn === 9) {
 				gameBoard.htmlEditor.endGameActions();
