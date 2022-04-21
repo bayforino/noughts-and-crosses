@@ -55,8 +55,12 @@ const noughtsAndCrosses = (function () {
 			const _resetButton = document.getElementById("reset-button");
 			const _generateGameBoard = function () {
 				for (let i = 0; i < _htmlBoard.length; i++) {
-					_htmlBoard[i].innerHTML = gameBoard.index[i];
+					if (gameBoard.index[i] != "") {
+					_htmlBoard[i].innerHTML = `<p>${gameBoard.index[i]}</p>`;
+				} else {
+					_htmlBoard[i].innerHTML = '';
 				}
+			}
 			};
 
 			const addMark = function () {
