@@ -57,6 +57,8 @@ const noughtsAndCrosses = (function () {
 					_htmlBoard[i].innerHTML = gameBoard.index[i];
 				}
 			};
+			
+
 
 			const addMark = function () {
 				if (gameBoard.index[this.id] != "") {
@@ -71,9 +73,11 @@ const noughtsAndCrosses = (function () {
 
 			const _actionsAfterTurn = function () {
 				game.turn++;
+				game.checkWinner();
+				console.log(players.currentPlayer);
 				players.changeCurrentPlayer();
 				players.addCurrentPlayerInfo();
-				game.checkWinner();
+				
 			};
 
 			const _addEventListenersToCells = function () {
@@ -82,6 +86,13 @@ const noughtsAndCrosses = (function () {
 					gridCell.addEventListener("click", addMark, true);
 				}
 			};
+
+			const removeEventListenersFromCells = function () {
+				for (let i = 0; i < _htmlBoard.length; i++) {
+					const gridCell = _htmlBoard[i];
+					gridCell.removeEventListener("click", addMark, true);
+				}
+			}
 
 			const _addEventListenerToButtons = function () {
 				const resetButton = document.getElementById("reset-button");
@@ -101,7 +112,7 @@ const noughtsAndCrosses = (function () {
 			const resetCellClasses = function () {
 				for (let i = 0; i < _htmlBoard.length; i++) {
 					const gridCell = _htmlBoard[i];
-					gridCell.setAttribute("class", "game-grid-cell phlegm");
+					gridCell.setAttribute("class", "game-grid-cell");
 				}
 			};
 
@@ -115,6 +126,7 @@ const noughtsAndCrosses = (function () {
 				resetGrid,
 				htmlInfo,
 				initialiseDOM,
+				removeEventListenersFromCells
 			};
 		})();
 
@@ -143,24 +155,25 @@ const noughtsAndCrosses = (function () {
 				gameBoard.index[1] == "x" &&
 				gameBoard.index[2] == "x"
 			) {
+				let winner = players.currentPlayer.name;
 				//setTimeouts are to stop alerts firing at the wrong time
 				setTimeout(function () {
-					alert(`${players.currentPlayer.name} wins!!!`);
+					alert(`${winner} wins!!!`);
 				}, 1);
-				setTimeout(function () {
-					gameBoard.htmlEditor.resetGrid();
-				}, 1);
+					gameBoard.htmlEditor.removeEventListenersFromCells();
 			} else if (game.turn === 9) {
 				setTimeout(function () {
 					alert(`Unfortunately it's a draw. I'm so sorry.`);
 				}, 1);
-				setTimeout(function () {
-					gameBoard.htmlEditor.resetGrid();
-				}, 1);
+					gameBoard.htmlEditor.removeEventListenersFromCells();
 			} else {
 				return;
 			}
 		};
+
+		// const declareWinner = function () {
+		// 	alert
+		// }
 		return {
 			checkWinner,
 			turn,
