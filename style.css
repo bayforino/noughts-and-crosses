@@ -40,6 +40,11 @@ body {
   background-color: lightcoral;
 }
 
+.game-grid-cell p {
+  position:relative;
+  top: -5px;
+}
+
 button {
   border: 3px solid rgb(219, 79, 79);
   border-radius: 5px;
@@ -62,6 +67,6 @@ button:hover {
 }
 
 .flashing {
-  background-color: rgb(226, 87, 87);
+  background-color: rgb(243, 105, 105);
   transition: 200ms ease-in-out;
 }
