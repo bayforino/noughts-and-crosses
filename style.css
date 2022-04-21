@@ -29,6 +29,8 @@ body {
   grid-template: repeat(3, 100px) / repeat(3, 100px);
   gap: 3px;
   background-color: white;
+  cursor: pointer;
+  user-select: none;
 }
 
 .game-grid-cell {

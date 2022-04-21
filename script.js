@@ -57,8 +57,6 @@ const noughtsAndCrosses = (function () {
 					_htmlBoard[i].innerHTML = gameBoard.index[i];
 				}
 			};
-			
-
 
 			const addMark = function () {
 				if (gameBoard.index[this.id] != "") {
@@ -77,7 +75,6 @@ const noughtsAndCrosses = (function () {
 				console.log(players.currentPlayer);
 				players.changeCurrentPlayer();
 				players.addCurrentPlayerInfo();
-				
 			};
 
 			const _addEventListenersToCells = function () {
@@ -92,7 +89,7 @@ const noughtsAndCrosses = (function () {
 					const gridCell = _htmlBoard[i];
 					gridCell.removeEventListener("click", addMark, true);
 				}
-			}
+			};
 
 			const _addEventListenerToButtons = function () {
 				const resetButton = document.getElementById("reset-button");
@@ -126,7 +123,7 @@ const noughtsAndCrosses = (function () {
 				resetGrid,
 				htmlInfo,
 				initialiseDOM,
-				removeEventListenersFromCells
+				removeEventListenersFromCells,
 			};
 		})();
 
@@ -160,20 +157,16 @@ const noughtsAndCrosses = (function () {
 				setTimeout(function () {
 					alert(`${winner} wins!!!`);
 				}, 1);
-					gameBoard.htmlEditor.removeEventListenersFromCells();
+				gameBoard.htmlEditor.removeEventListenersFromCells();
 			} else if (game.turn === 9) {
 				setTimeout(function () {
 					alert(`Unfortunately it's a draw. I'm so sorry.`);
 				}, 1);
-					gameBoard.htmlEditor.removeEventListenersFromCells();
+				gameBoard.htmlEditor.removeEventListenersFromCells();
 			} else {
 				return;
 			}
 		};
-
-		// const declareWinner = function () {
-		// 	alert
-		// }
 		return {
 			checkWinner,
 			turn,
