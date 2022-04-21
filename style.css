@@ -10,6 +10,14 @@ body {
   place-content: center;
 }
 
+.main-content-container{
+    display:grid;
+}
+
+.main-content-container h1 {
+    text-align: center;
+}
+
 .game-grid {
   border: 1px solid black;
   width: fit-content;
@@ -22,3 +30,4 @@ body {
   display: grid;
   place-content: center;
 }
+
