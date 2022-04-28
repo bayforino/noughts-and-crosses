@@ -56,11 +56,11 @@ const noughtsAndCrosses = (function () {
 			const _generateGameBoard = function () {
 				for (let i = 0; i < _htmlBoard.length; i++) {
 					if (gameBoard.index[i] != "") {
-					_htmlBoard[i].innerHTML = `<p>${gameBoard.index[i]}</p>`;
-				} else {
-					_htmlBoard[i].innerHTML = '';
+						_htmlBoard[i].innerHTML = `<p>${gameBoard.index[i]}</p>`;
+					} else {
+						_htmlBoard[i].innerHTML = "";
+					}
 				}
-			}
 			};
 
 			const addMark = function () {
@@ -180,7 +180,8 @@ const noughtsAndCrosses = (function () {
 		let turn = 0;
 		let win = false;
 		let winner = "";
-		// const winConditions = [
+
+		// Winning combinations:
 		// 			[0, 1, 2],
 		// 			[3, 4, 5],
 		// 			[6, 7, 8],
@@ -188,17 +189,90 @@ const noughtsAndCrosses = (function () {
 		// 			[1, 4, 7],
 		// 			[2, 5, 8],
 		// 			[0, 4, 8],
-		// 			[2, 4, 6],
-		// 		];
+		// 			[2, 4, 6]
+
 		const checkWinner = function () {
-			if (
-				gameBoard.index[0] == "x" &&
-				gameBoard.index[1] == "x" &&
-				gameBoard.index[2] == "x"
-			) {
+			const CheckWinnerActions = function () {
 				game.win = true;
 				gameBoard.htmlEditor.endGameActions();
+			};
+
+			// Checking for winning combinations
+
+			if (
+				(gameBoard.index[0] == "x" &&
+					gameBoard.index[1] == "x" &&
+					gameBoard.index[2] == "x") ||
+				(gameBoard.index[0] == "o" &&
+					gameBoard.index[1] == "o" &&
+					gameBoard.index[2] == "o")
+			) {
+				CheckWinnerActions();
+			} else if (
+				(gameBoard.index[3] == "x" &&
+					gameBoard.index[4] == "x" &&
+					gameBoard.index[5] == "x") ||
+				(gameBoard.index[3] == "o" &&
+					gameBoard.index[4] == "o" &&
+					gameBoard.index[5] == "o")
+			) {
+				CheckWinnerActions();
+			} else if (
+				(gameBoard.index[6] == "x" &&
+					gameBoard.index[7] == "x" &&
+					gameBoard.index[8] == "x") ||
+				(gameBoard.index[6] == "o" &&
+					gameBoard.index[7] == "o" &&
+					gameBoard.index[8] == "o")
+			) {
+				CheckWinnerActions();
+			} else if (
+				(gameBoard.index[0] == "x" &&
+					gameBoard.index[3] == "x" &&
+					gameBoard.index[6] == "x") ||
+				(gameBoard.index[0] == "o" &&
+					gameBoard.index[3] == "o" &&
+					gameBoard.index[6] == "o")
+			) {
+				CheckWinnerActions();
+			} else if (
+				(gameBoard.index[1] == "x" &&
+					gameBoard.index[4] == "x" &&
+					gameBoard.index[7] == "x") ||
+				(gameBoard.index[1] == "o" &&
+					gameBoard.index[4] == "o" &&
+					gameBoard.index[7] == "o")
+			) {
+				CheckWinnerActions();
+			} else if (
+				(gameBoard.index[2] == "x" &&
+					gameBoard.index[5] == "x" &&
+					gameBoard.index[8] == "x") ||
+				(gameBoard.index[2] == "o" &&
+					gameBoard.index[5] == "o" &&
+					gameBoard.index[8] == "o")
+			) {
+				CheckWinnerActions();
+			} else if (
+				(gameBoard.index[0] == "x" &&
+					gameBoard.index[4] == "x" &&
+					gameBoard.index[8] == "x") ||
+				(gameBoard.index[0] == "o" &&
+					gameBoard.index[4] == "o" &&
+					gameBoard.index[8] == "o")
+			) {
+				CheckWinnerActions();
+			} else if (
+				(gameBoard.index[2] == "x" &&
+					gameBoard.index[4] == "x" &&
+					gameBoard.index[6] == "x") ||
+				(gameBoard.index[2] == "o" &&
+					gameBoard.index[4] == "o" &&
+					gameBoard.index[6] == "o")
+			) {
+				CheckWinnerActions();
 			} else if (game.turn === 9) {
+				// It's a tie
 				gameBoard.htmlEditor.endGameActions();
 			} else {
 				return;
