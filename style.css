@@ -14,13 +14,29 @@ body {
   place-content: center;
 }
 
+a, a:visited {
+  color:rgb(255, 226, 226);
+  transition: 100ms ease-in-out;
+}
+
+a:hover{
+  color:white;
+  transition: 100ms ease-in-out;
+}
+
 .main-content-container{
     display:grid;
     gap: 30px;
+    place-content: center;
 }
 
 .main-content-container h1 {
     text-align: center;
+}
+
+.main-content-container h5 {
+  margin: 0;
+  text-align: center;
 }
 
 .game-grid {
@@ -31,6 +47,7 @@ body {
   background-color: white;
   cursor: pointer;
   user-select: none;
+  place-self: center;
 }
 
 .game-grid-cell {
